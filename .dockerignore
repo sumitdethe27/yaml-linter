@@ -1,0 +1,32 @@
+# Byte-compiled / optimized / DLL files
+__pycache__/
+*.py[cod]
+*.so
+
+# Virtual environment
+venv/
+.env
+
+# Git-specific files
+.git/
+.gitignore
+
+# Cache and logs
+*.log
+*.cache
+
+# Jupyter Notebook checkpoints
+.ipynb_checkpoints/
+
+# Static files
+static/css/*.map
+
+# YAML files (if you want to ignore them, otherwise remove this)
+*.yaml
+*.yml
+
+# Python virtual environment
+venv/
+
+# Ignore Dockerfile itself
+Dockerfile
