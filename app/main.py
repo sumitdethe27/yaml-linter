@@ -17,7 +17,7 @@ app.add_middleware(
     allow_headers=["*"],
 )
 # Set up static files and templates
-app.mount("/static", StaticFiles(directory="static"), name="static")  # Serve static files from the 'static' directory
+app.mount("/static", StaticFiles(directory="static"), name="static")
 templates = Jinja2Templates(directory="app/templates")  # Set up Jinja2 template directory
 
 # Register the main router with the app
