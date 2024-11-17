@@ -1,0 +1,28 @@
+# Python-related files and folders
+*.pyc
+*.pyo
+*.pyd
+__pycache__/
+*.env
+# Python virtual environment
+venv/
+
+# Frontend dependencies
+frontend/vite-project/node_modules/
+frontend/vite-project/dist/
+frontend/vite-project/build/
+frontend/vite-project/*.log          # NPM or Yarn logs
+frontend/vite-project/.parcel-cache/ # Parcel cache (if applicable)
+
+# IDE and editor-related files
+.idea/
+.vscode/
+*.swp
+
+# Logs and databases
+*.log
+*.sqlite3
+
+# Other generated files
+*.lock
+.DS_Store           # macOS system file

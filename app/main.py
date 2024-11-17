@@ -18,12 +18,10 @@ app.add_middleware(
 )
 # Set up static files and templates
 app.mount("/static", StaticFiles(directory="static"), name="static")
-templates = Jinja2Templates(directory="app/templates")  # Set up Jinja2 template directory
-
 # Register the main router with the app
 app.include_router(main_router)  # Include the routers defined in app/routers/__init__.py
 
 # Define the home route
-@app.get("/")
-async def home(request: Request):
-    return templates.TemplateResponse("home.html", {"request": request})  # Render the home.html template
+# @app.get("/")
+# async def home(request: Request):
+#     return templates.TemplateResponse("home.html", {"request": request})  # Render the home.html template
