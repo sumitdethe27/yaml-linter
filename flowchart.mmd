@@ -1,0 +1,12 @@
+flowchart TD
+    A[User enters YAML text] --> B[User clicks Compare button]
+    B --> C[JavaScript sends data to server]
+    C --> D[Server processes YAMLs]
+    D --> E[Server checks if YAMLs are valid]
+    E -->|Invalid YAML| F[Return error message]
+    E -->|Valid YAML| G[Compare YAMLs]
+    G -->|Identical| H[Return identical status]
+    G -->|Different| I[Return difference details]
+    H --> J[JavaScript updates UI - Green highlight]
+    I --> K[JavaScript updates UI - Red highlights]
+    F --> L[JavaScript shows error message]

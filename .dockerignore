@@ -1,32 +1,16 @@
-# Byte-compiled / optimized / DLL files
+# Python-related files
+*.pyc
+*.pyo
+*.pyd
 __pycache__/
-*.py[cod]
-*.so
+*.env
 
-# Virtual environment
-venv/
-.env
-
-# Git-specific files
-.git/
-.gitignore
-
-# Cache and logs
+# Logs and caches
 *.log
-*.cache
+*.sqlite3
 
-# Jupyter Notebook checkpoints
-.ipynb_checkpoints/
+# System files
+.DS_Store
 
-# Static files
-static/css/*.map
-
-# YAML files (if you want to ignore them, otherwise remove this)
-*.yaml
-*.yml
-
-# Python virtual environment
-venv/
-
-# Ignore Dockerfile itself
-Dockerfile
+# Ignore everything in the frontend folder
+frontend/
