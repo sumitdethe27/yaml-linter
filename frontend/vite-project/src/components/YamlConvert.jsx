@@ -6,7 +6,7 @@ const Convert = () => {
   const [outputText, setOutputText] = useState('');
   
   // State to track if we're loading during API call
-  const [isLoading, setIsLoading] = useState(false);
+  const [isLoading, setIsLoading] = useState(false)
   // State to handle any errors that might occur
   const [error, setError] = useState(null);
 

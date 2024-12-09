@@ -1,30 +1,30 @@
-from fastapi import APIRouter, Request, Form
-from fastapi.templating import Jinja2Templates
-from fastapi.responses import HTMLResponse
+from fastapi import APIRouter, Request
 import yaml
+from yaml.scanner import ScannerError
+
+
 
 router = APIRouter()
 
-templates = Jinja2Templates(directory="app/templates")
+def lint(file:str)-> dict:
+    '''
+    input will be a yaml in string format 
+    and errors will be returned in a dict
+
+    '''
+    try:
+        yaml_load=yaml.load(file)
+
+    except ScannerError as e:
+        return {'error': str(e)}
+
 
 # GET method to render the fix page
-@router.get("/", response_class=HTMLResponse)
+@router.get("/")
 async def fix(request: Request):
-    return templates.TemplateResponse("fix.html", {"request": request})
+    return "Hello"
 
 # POST method to handle fixing YAML indentation
-@router.post("/", response_class=HTMLResponse)
-async def fix_post(request: Request, yaml_content: str = Form(...)):
-    try:
-        # Load and re-dump the YAML content to fix indentation
-        parsed_yaml = yaml.safe_load(yaml_content)
-        fixed_yaml = yaml.dump(parsed_yaml, sort_keys=False)
-
-        result = fixed_yaml
-    except yaml.YAMLError as e:
-        result = f"Error: {str(e)}"
-    
-    return templates.TemplateResponse("fix.html", {
-        "request": request,
-        "result": result
-    })
+@router.post("/")
+async def fix_post(request: Request):
+    return "hello" 

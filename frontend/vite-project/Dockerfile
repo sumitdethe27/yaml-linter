@@ -1,0 +1,30 @@
+# Stage 1: Build the application
+FROM node:19-alpine as builder
+
+# Set the working directory in the container
+WORKDIR /app
+
+# Copy package.json and package-lock.json (if available) to the working directory
+COPY package*.json ./
+
+# Install dependencies
+RUN npm install
+
+# Copy the rest of the application code to the working directory
+COPY . .
+
+# Build the application (assuming you have a build script in package.json)
+RUN npm run build
+
+# Stage 2: Serve the app using Nginx
+FROM nginx:alpine
+
+# Copy the build output from the builder stage into the Nginx html directory
+COPY --from=builder /app/dist /usr/share/nginx/html
+
+# Expose port 80 to the outside world
+EXPOSE 80
+
+# Nginx will serve the app by default
+CMD ["nginx", "-g", "daemon off;"]
+
