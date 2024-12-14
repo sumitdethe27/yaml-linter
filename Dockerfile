@@ -1,16 +1,30 @@
-# Use an official Python runtime as a parent image
-FROM python:3.10
+# Stage 1: Builder
+FROM python:3.10-alpine as builder
 
-# Set the working directory in the container
+# Install build dependencies required for Python packages
+RUN apk add --no-cache gcc musl-dev libffi-dev make
+
+WORKDIR /app
+COPY requirements.txt .
+
+RUN python -m venv /app/venv && \
+    /app/venv/bin/pip install --no-cache-dir -r requirements.txt
+
+COPY . .
+
+# Stage 2: Runtime
+FROM python:3.10-alpine
+
 WORKDIR /app
 
-# Copy the current directory contents into the container
-COPY . /app
-# Install the required dependencies
-RUN pip install  -r requirements.txt
+# Install runtime dependencies
+RUN apk add --no-cache libffi
 
-# Expose the port the app will run on
+COPY --from=builder /app/venv /app/venv
+COPY . .
+
+ENV PATH="/app/venv/bin:$PATH"
+
 EXPOSE 8000
 
-# Command to run the app using Uvicorn
 CMD ["uvicorn", "app.main:app", "--host", "0.0.0.0", "--port", "8000"]

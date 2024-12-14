@@ -2,7 +2,8 @@ from fastapi import FastAPI, Request, Response
 from fastapi.middleware.cors import CORSMiddleware
 from fastapi.responses import JSONResponse
 from fastapi import Body
-from app.routers.auth import User, auth_endpoint 
+from app.routers.auth import User, auth_endpoint
+from app.routers.convert import convert, InputValidation
 from app.routers import router as main_router
 import logging
 
@@ -29,6 +30,16 @@ async def auth_endpoint_direct(
     action: str = "login"
 ):
     return await auth_endpoint(request, user, action)
+
+
+@app.post("/convert")
+async def convert_endpoint_direct(
+    request: Request,
+    input_validation: dict = Body(...)
+):
+    input_data = InputValidation(**input_validation)  # Validate the input
+    return await convert(input_data)
+
 # Include routers
 app.include_router(main_router, prefix="/api")
 

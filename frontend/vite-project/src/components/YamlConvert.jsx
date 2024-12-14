@@ -30,7 +30,7 @@ const Convert = () => {
       setError(null); // Clear any previous errors
         console.log(inputText)
       // Make API call to backend
-      const response = await fetch('http://localhost:8000/convert', {
+      const response = await fetch('https://now.sumitdethe.live/api/convert', {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
