@@ -1,4 +1,4 @@
-from fastapi import APIRouter, HTTPException, Request, Depends
+from fastapi import APIRouter, HTTPException, Request, Query
 from pydantic import BaseModel
 from passlib.context import CryptContext
 from datetime import datetime, timedelta
@@ -47,44 +47,52 @@ def create_access_token(data: dict, expires_delta: timedelta = None) -> str:
 async def get_db_connection():
     """
     Returns a connection to the PostgreSQL database using asyncpg.
-    Manages connection using manual handling (no async with).
     """
-    conn = await asyncpg.connect(DATABASE_URL)
     try:
+        print(f"Connecting to database at {DATABASE_URL}")
+        conn = await asyncpg.connect(
+            DATABASE_URL, 
+            timeout=5,  # Connection timeout
+            statement_cache_size=0  # Disable statement caching for debugging
+        )
+        print(f"Database connection established: {conn}")
         return conn
     except Exception as e:
-        await conn.close()
-        raise e
-    
+        print(f"Database connection failed: {e}")
+        print(DATABASE_URL)
+        raise HTTPException(status_code=500, detail=f"Database connection failed: {str(e)}")
+
 # Utility function to retrieve user by email
 async def get_user_by_email(email: str, conn: asyncpg.Connection):
     result = await conn.fetchrow("SELECT * FROM users WHERE email = $1", email)
     return result
 
-# Unified route for both login and signup
-@router.post("/")
-async def auth(req: Request, user: User, action: str = "login"):
+@router.post("/")  # Explicit route
+async def auth_endpoint(
+    request: Request,
+    user: User,
+    action: str = Query(default="login")
+):
     """
-    Handles both login and signup actions based on the `action` query parameter.
-    action = "login" or "signup"
+    Handles both login and signup actions 
     """
-    # Print the request object
-    print("Request Object:")
-    print(f"Method: {req.method}")
-    print(f"Headers: {req.headers}")
-    print(f"Client: {req.client}")
-    print(f"Query Params: {req.query_params}")
-    print(f"Body: {await req.body()}")  # Print the raw body content
+    # Comprehensive logging
+    print("======== AUTH ENDPOINT DEBUG ========")
+    print(f"Full Request URL: {request.url}")
+    print(f"Request Method: {request.method}")
+    print(f"Action: {action}")
+    print(f"User Email: {user.email}")
+    print(f"Request Headers: {dict(request.headers)}")
+    print(f"Query Params: {dict(request.query_params)}")
 
     conn = await get_db_connection()
     try:
         if action == "signup":
-            # Check if user already exists
+            print("Processing signup action...")
             existing_user = await get_user_by_email(user.email, conn)
             if existing_user:
                 raise HTTPException(status_code=400, detail="User already exists")
 
-            # Hash password and save user
             hashed_password = hash_password(user.password)
             await conn.execute(
                 "INSERT INTO users (email, password) VALUES ($1, $2)",
@@ -94,16 +102,14 @@ async def auth(req: Request, user: User, action: str = "login"):
             return {"message": "User created successfully"}
 
         elif action == "login":
-            # Check if user exists
+            print("Processing login action...")
             db_user = await get_user_by_email(user.email, conn)
             if not db_user:
                 raise HTTPException(status_code=401, detail="Invalid email or password")
 
-            # Verify password
             if not verify_password(user.password, db_user["password"]):
                 raise HTTPException(status_code=401, detail="Invalid email or password")
 
-            # Generate JWT token
             access_token = create_access_token(data={"sub": user.email})
             return {"access_token": access_token, "token_type": "bearer"}
 
@@ -112,3 +118,4 @@ async def auth(req: Request, user: User, action: str = "login"):
 
     finally:
         await conn.close()
+        print("Database connection closed.")

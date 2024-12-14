@@ -11,3 +11,4 @@ passlib[bcrypt]
 python-multipart
 asyncpg
 python-dotenv
+starlette

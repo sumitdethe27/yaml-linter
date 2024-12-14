@@ -31,7 +31,7 @@ const LoginSignup = () => {
 
       // Send authentication request
       const response = await axios.post(
-        `http://localhost:8000/auth/?action=${action}`,
+        `https://now.sumitdethe.live/api/auth?action=${action}`,
         { email, password },
         {
           withCredentials: true,
