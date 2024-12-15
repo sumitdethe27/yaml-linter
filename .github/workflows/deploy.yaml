@@ -51,16 +51,9 @@ jobs:
           # Stop existing containers (backend)
           docker-compose down || true
 
-          # Pull latest backend images and rebuild
-          docker-compose pull
           docker-compose up -d --build
           
-          # Frontend Deployment
-          cd ~/yaml-linter/frontend/vite-project
-
-          # Build and run the frontend container
-          docker build -t frontend .
-          docker run -itd -p 81:80 frontend
+          echo "Deployment completed"
         EOF
       env:
         GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
