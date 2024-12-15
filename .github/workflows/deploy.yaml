@@ -25,9 +25,9 @@ jobs:
     
     - name: Deploy to Server
       run: |
-        ssh -vv -o StrictHostKeyChecking=no ${{ secrets.SERVER_USERNAME }}@${{ secrets.SERVER_IP }} << 'EOF'
+        ssh -o StrictHostKeyChecking=no ${{ secrets.SERVER_USERNAME }}@${{ secrets.SERVER_IP }} << 'EOF'
           # Backend Deployment
-          
+          set +x
           # Ensure we're in the right directory
           mkdir -p ~/app/backend
           cd ~/yaml-linter
