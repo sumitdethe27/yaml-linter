@@ -1,0 +1,40 @@
+name: Deploy to Server
+
+on:
+  push:
+    branches: [ "master" ]
+  workflow_dispatch:
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+    
+    steps:
+    - uses: actions/checkout@v4
+    
+    - name: Setup SSH
+      uses: webfactory/ssh-agent@v0.9.0
+      with:
+        ssh-private-key: ${{ secrets.SERVER_SSH_PRIVATE_KEY }}
+    
+    - name: Deploy to Server
+      run: |
+        ssh -o StrictHostKeyChecking=no ${{ secrets.SERVER_USERNAME }}@${{ secrets.SERVER_IP }} << 'EOF'
+          # Update and install tools
+          sudo apt-get update
+          sudo apt-get install -y git docker.io docker-compose
+
+          # Clone or update repository
+          if [ ! -d "~/app" ]; then
+            git clone ${{ github.repository }} ~/app
+          else
+            cd ~/app
+            git pull origin master
+          fi
+
+          # Navigate to project directory
+          cd ~/app
+
+          # Build and restart containers
+          docker-compose down
+          docker-compose up -d --build
+        EOF
