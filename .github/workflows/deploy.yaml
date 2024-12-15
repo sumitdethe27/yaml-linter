@@ -3,7 +3,14 @@ name: Deploy to Server
 on:
   push:
     branches: [ "master" ]
+  
   workflow_dispatch:
+    inputs:
+      reason:
+        description: 'Reason for manual deployment'
+        required: false
+        default: 'Manual trigger'
+
 jobs:
   deploy:
     runs-on: ubuntu-latest
@@ -18,23 +25,42 @@ jobs:
     
     - name: Deploy to Server
       run: |
-        ssh -o StrictHostKeyChecking=no ${{ secrets.SERVER_USERNAME }}@${{ secrets.SERVER_IP }} << 'EOF'
+        ssh -vv -o StrictHostKeyChecking=no ${{ secrets.SERVER_USERNAME }}@${{ secrets.SERVER_IP }} << 'EOF'
+          # Backend Deployment
+          
+          # Ensure we're in the right directory
+          mkdir -p ~/app/backend
+          cd ~/yaml-linter
+
+          # Remove existing repository if needed
+          rm -rf ${{ github.event.repository.name }} || true
+
+          # Clone repository
+          git clone https://github.com/${{ github.repository }} .
+
+          # List contents to verify
+          ls -la
+
           # Update and install tools
           sudo apt-get update
           sudo apt-get install -y git docker.io docker-compose
 
-          # Clone or update repository
-          if [ ! -d "~/app" ]; then
-            git clone ${{ github.repository }} ~/app
-          else
-            cd ~/app
-            git pull origin master
-          fi
+          # Ensure docker permissions
+          sudo usermod -aG docker $USER
 
-          # Navigate to project directory
-          cd ~/app
+          # Stop existing containers (backend)
+          docker-compose down || true
 
-          # Build and restart containers
-          docker-compose down
+          # Pull latest backend images and rebuild
+          docker-compose pull
           docker-compose up -d --build
+          
+          # Frontend Deployment
+          cd ~/yaml-linter/frontend/vite-project
+
+          # Build and run the frontend container
+          docker build -t frontend .
+          docker run -itd -p 81:80 frontend
         EOF
+      env:
+        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
