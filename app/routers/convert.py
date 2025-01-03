@@ -48,7 +48,7 @@ def json_to_yaml(file):
     except json.JSONDecodeError as e:
         pass
 
-@router.post("/")
+@router.post("")
 async def convert(request: InputValidation):
     try:
         output = ""

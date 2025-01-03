@@ -68,7 +68,9 @@ const Navbar = () => {
             <Link to="/convert" className="px-3 py-2 rounded-md text-gray-700 hover:text-blue-600 hover:bg-gray-100">
               Convert
             </Link>
-            
+            <Link to="/fix" className="px-3 py-2 rounded-md text-gray-700 hover:text-blue-600 hover:bg-gray-100">
+              Lint
+            </Link>
             {/* Conditional Auth Link */}
             {isLoggedIn ? (
               <div className="relative group">
@@ -127,6 +129,9 @@ const Navbar = () => {
             </Link>
             <Link to="/convert" className="block w-full text-left px-3 py-2 rounded-md text-gray-700 hover:text-blue-600 hover:bg-gray-100">
               Convert
+            </Link>
+            <Link to="/fix" className="block w-full text-left px-3 py-2 rounded-md text-gray-700 hover:text-blue-600 hover:bg-gray-100">
+              Lint
             </Link>
             
             {/* Mobile Auth Link */}

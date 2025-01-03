@@ -4,6 +4,7 @@ from fastapi.responses import JSONResponse
 from fastapi import Body
 from app.routers.auth import User, auth_endpoint
 from app.routers.convert import convert, InputValidation
+from app.routers.fix import lint, YAMLInputValidation
 from app.routers import router as main_router
 import logging
 
@@ -39,6 +40,18 @@ async def convert_endpoint_direct(
 ):
     input_data = InputValidation(**input_validation)  # Validate the input
     return await convert(input_data)
+
+@app.post("/fix")
+async def fix_endpoint_direct(
+    request: Request,
+    input_validation: dict = Body(...)
+):
+    """
+    Handle the `/fix` endpoint to process and lint YAML.
+    """
+    input_data = YAMLInputValidation(**input_validation)  # Validate the input
+    print("req")
+    return await lint(input_data)
 
 # Include routers
 app.include_router(main_router, prefix="/api")
