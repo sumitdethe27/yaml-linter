@@ -20,7 +20,7 @@ services:
       dockerfile: Dockerfile
     container_name: frontend
     ports:
-      - "81:5173"
+      - "81:80"
     networks:
       - app-network
 
