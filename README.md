@@ -1,12 +1,34 @@
-flowchart TD
-    A[User enters YAML text] --> B[User clicks Compare button]
-    B --> C[JavaScript sends data to server]
-    C --> D[Server processes YAMLs]
-    D --> E[Server checks if YAMLs are valid]
-    E -->|Invalid YAML| F[Return error message]
-    E -->|Valid YAML| G[Compare YAMLs]
-    G -->|Identical| H[Return identical status]
-    G -->|Different| I[Return difference details]
-    H --> J[JavaScript updates UI - Green highlight]
-    I --> K[JavaScript updates UI - Red highlights]
-    F --> L[JavaScript shows error message]
+# 🧹 YAML Linter Tool
+
+A simple and powerful web-based YAML Linter to validate and clean your YAML files with ease.
+
+## 🚀 Features
+
+- ✅ Instant YAML linting and error highlighting
+- 📁 Upload YAML files or paste directly into the editor
+- 🌐 Clean and minimal web interface
+- 🔐 Basic authentication support
+- 🧰 Backend built with FastAPI
+
+## 🔐 Demo Credentials
+
+You can log in using the following credentials:
+
+- **Email:** `admin@read.com`  
+- **Password:** `adminread`
+
+> These credentials are meant for demo/testing purposes only.
+
+## 🛠️ Tech Stack
+
+- **Frontend:** HTML/CSS/JS
+- **Backend:** Python FastAPI
+- **Linting Engine:** PyYAML / ruamel.yaml (customizable)
+
+## 📦 Installation
+
+1. Clone the repository:
+
+   ```bash
+   git clone https://github.com/sumitdethe27/yaml-linter.git
+   cd yaml-linter
