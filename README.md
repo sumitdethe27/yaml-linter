@@ -2,6 +2,11 @@
 
 A simple and powerful web-based YAML Linter to validate and clean your YAML files with ease.
 
+
+
+![image](https://github.com/user-attachments/assets/c6eddb25-fc0a-4451-8ecf-440bf8548672)
+![image](https://github.com/user-attachments/assets/c6eddb25-fc0a-4451-8ecf-440bf8548672)
+
 ## 🚀 Features
 
 - ✅ Instant YAML linting and error highlighting
@@ -33,7 +38,4 @@ You can log in using the following credentials:
    git clone https://github.com/sumitdethe27/yaml-linter.git
    cd yaml-linter
 
-
-![image](https://github.com/user-attachments/assets/c6eddb25-fc0a-4451-8ecf-440bf8548672)
-![image](https://github.com/user-attachments/assets/c6eddb25-fc0a-4451-8ecf-440bf8548672)
 
